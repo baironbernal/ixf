@@ -16,6 +16,7 @@ class AuthController extends Controller
     {
         $user = User::create($request->validated());
 
+        $user->assignRole('client');
         Auth::login($user);
 
         return new UserResource($user);
