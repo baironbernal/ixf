@@ -18,7 +18,8 @@ export function VmProvider({ children }) {
 
   useEffect(() => {
     const echo = getEcho()
-    const channel = echo
+
+    echo
       .private('vms')
       .listen('VmCreated', (vm) => {
         setVms((prev) => (prev.some((v) => v.id === vm.id) ? prev : [vm, ...prev]))
@@ -31,21 +32,21 @@ export function VmProvider({ children }) {
       })
 
     return () => {
-      channel.stopListening('VmCreated')
-      channel.stopListening('VmUpdated')
-      channel.stopListening('VmDeleted')
       echo.leave('vms')
+      destroyEcho()
     }
   }, [])
 
   const create = useCallback(async (data) => {
-    const vm = await vmService.create(data)
-    setVms((prev) => [vm, ...prev])
+    const res = await vmService.create(data)
+    const vm = res.data ?? res
+    setVms((prev) => (prev.some((v) => v.id === vm.id) ? prev : [vm, ...prev]))
     return vm
   }, [])
 
   const update = useCallback(async (id, data) => {
-    const vm = await vmService.update(id, data)
+    const res = await vmService.update(id, data)
+    const vm = res.data ?? res
     setVms((prev) => prev.map((v) => (v.id === vm.id ? vm : v)))
     return vm
   }, [])

@@ -1,5 +1,3 @@
-const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
-
 function getXsrfToken() {
   const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/)
   return match ? decodeURIComponent(match[1]) : null
@@ -7,7 +5,7 @@ function getXsrfToken() {
 
 async function request(method, path, body) {
   const xsrf = getXsrfToken()
-  const res = await fetch(`${BASE}${path}`, {
+  const res = await fetch(path, {
     method,
     headers: {
       'Content-Type': 'application/json',
@@ -31,7 +29,7 @@ async function request(method, path, body) {
 }
 
 export async function csrf() {
-  await fetch(`${BASE}/sanctum/csrf-cookie`, { credentials: 'include' })
+  await fetch('/sanctum/csrf-cookie', { credentials: 'include' })
 }
 
 export const api = {
