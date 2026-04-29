@@ -18,6 +18,11 @@ async function request(method, path, body) {
     body: body !== undefined ? JSON.stringify(body) : undefined,
   })
 
+  if (res.status === 401) {
+    window.dispatchEvent(new CustomEvent('auth:expired'))
+    throw { message: 'Session expired. Please log in again.' }
+  }
+
   if (res.status === 204 || res.status === 205) return null
 
   const data = await res.json().catch(() => ({}))
@@ -30,9 +35,9 @@ export async function csrf() {
 }
 
 export const api = {
-  get: (path) => request('GET', path),
-  post: (path, body) => request('POST', path, body),
-  patch: (path, body) => request('PATCH', path, body),
-  put: (path, body) => request('PUT', path, body),
-  delete: (path) => request('DELETE', path),
+  get:    (path)        => request('GET',    path),
+  post:   (path, body)  => request('POST',   path, body),
+  patch:  (path, body)  => request('PATCH',  path, body),
+  put:    (path, body)  => request('PUT',    path, body),
+  delete: (path)        => request('DELETE', path),
 }

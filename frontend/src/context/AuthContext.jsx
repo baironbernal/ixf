@@ -10,6 +10,13 @@ export function AuthProvider({ children }) {
     authService.me().then(setUser).catch(() => setUser(null))
   }, [])
 
+  // Auto-logout when any request returns 401 (session expired)
+  useEffect(() => {
+    const handle = () => setUser(null)
+    window.addEventListener('auth:expired', handle)
+    return () => window.removeEventListener('auth:expired', handle)
+  }, [])
+
   const login = useCallback(async (email, password) => {
     const data = await authService.login(email, password)
     setUser(data)
@@ -27,12 +34,14 @@ export function AuthProvider({ children }) {
     setUser(null)
   }, [])
 
+  const isLoading      = user === undefined
+  const isAuthenticated = user !== null && user !== undefined
+  const isAdmin        = user?.roles?.includes('admin') ?? false
+  const isClient       = user?.roles?.includes('client') ?? false
+
   return (
     <AuthContext
-      value={{
-        state: { user, loading: user === undefined },
-        actions: { login, register, logout },
-      }}
+      value={{ user, isLoading, isAuthenticated, isAdmin, isClient, login, register, logout }}
     >
       {children}
     </AuthContext>

@@ -43,9 +43,24 @@ function FormFieldError({ children }) {
   ) : null
 }
 
+function FormFieldSelect({ error, children, ...props }) {
+  const { id } = use(FormFieldContext)
+  return (
+    <select
+      id={id}
+      className={`input-field${error ? ' has-error' : ''}`}
+      style={{ cursor: 'pointer' }}
+      {...props}
+    >
+      {children}
+    </select>
+  )
+}
+
 export const FormField = {
   Root: FormFieldRoot,
   Label: FormFieldLabel,
   Control: FormFieldControl,
+  Select: FormFieldSelect,
   Error: FormFieldError,
 }

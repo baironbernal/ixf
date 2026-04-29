@@ -44,45 +44,24 @@ function LoadingScreen() {
 }
 
 function ProtectedRoute({ children }) {
-  const { state: { user, loading } } = use(AuthContext)
-  if (loading) return <LoadingScreen />
-  return user ? children : <Navigate to="/login" replace />
+  const { isAuthenticated, isLoading } = use(AuthContext)
+  if (isLoading) return <LoadingScreen />
+  return isAuthenticated ? children : <Navigate to="/login" replace />
 }
 
 function GuestRoute({ children }) {
-  const { state: { user, loading } } = use(AuthContext)
-  if (loading) return <LoadingScreen />
-  return user ? <Navigate to="/dashboard" replace /> : children
+  const { isAuthenticated, isLoading } = use(AuthContext)
+  if (isLoading) return <LoadingScreen />
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : children
 }
 
 function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route
-        path="/login"
-        element={
-          <GuestRoute>
-            <LoginPage />
-          </GuestRoute>
-        }
-      />
-      <Route
-        path="/register"
-        element={
-          <GuestRoute>
-            <RegisterPage />
-          </GuestRoute>
-        }
-      />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <DashboardPage />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
+      <Route path="/register" element={<GuestRoute><RegisterPage /></GuestRoute>} />
+      <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
     </Routes>
   )
 }

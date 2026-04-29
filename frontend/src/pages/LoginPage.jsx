@@ -25,9 +25,7 @@ function FormAlert({ message }) {
 }
 
 export function LoginPage() {
-  const {
-    actions: { login },
-  } = useAuth()
+  const { login } = useAuth()
   const navigate = useNavigate()
   const [isPending, startTransition] = useTransition()
   const [email, setEmail] = useState('')

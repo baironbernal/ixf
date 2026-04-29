@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\VmController;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 
@@ -9,6 +10,8 @@ Route::middleware(['web'])->group(function (){
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
 });
+
+Broadcast::routes(['middleware' => ['auth:sanctum', 'web']]);
 
 Route::middleware(['auth:sanctum', 'web'])->group(function () {
     Route::get('/user', [AuthController::class, 'user']);

@@ -24,7 +24,7 @@ function Spinner() {
 }
 
 const base =
-  'relative w-full py-3 px-6 text-sm font-mono tracking-widest flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-offset-2'
+  'relative py-3 px-6 text-sm font-mono tracking-widest flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-offset-2'
 
 export function PrimaryButton({ children, loading, className = '', ...props }) {
   return (

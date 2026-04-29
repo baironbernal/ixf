@@ -25,9 +25,7 @@ function FormAlert({ message }) {
 }
 
 export function RegisterPage() {
-  const {
-    actions: { register },
-  } = useAuth()
+  const { register } = useAuth()
   const navigate = useNavigate()
   const [isPending, startTransition] = useTransition()
   const [fields, setFields] = useState({
